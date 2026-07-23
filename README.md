@@ -1,6 +1,8 @@
 # 墨读 Modu Reader
 
 一个零构建、隐私友好的本地 Markdown 双栏阅读器。文件只在浏览器中读取，不需要登录，也不会被上传到服务器。
+
+
 <img width="2549" height="1403" alt="墨读封面" src="https://github.com/user-attachments/assets/2be5e036-416d-4d6c-bf7a-a4eb411ca4d0" />
 
 ## 为什么做这个项目
