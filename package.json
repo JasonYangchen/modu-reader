@@ -1,0 +1,23 @@
+{
+  "name": "modu-reader",
+  "version": "1.0.0",
+  "description": "一个零构建、隐私友好的本地 Markdown 双栏阅读器",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "serve": "node scripts/serve.cjs",
+    "test": "node --test tests/*.test.cjs",
+    "check": "node --check assets/core.js && node --check assets/app.js && node --test tests/*.test.cjs"
+  },
+  "keywords": [
+    "markdown",
+    "reader",
+    "preview",
+    "local-first",
+    "privacy",
+    "chinese"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

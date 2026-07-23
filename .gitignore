@@ -1,0 +1,10 @@
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+node_modules/
+coverage/
+*.log
+*.tmp
+*.swp

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="墨读：零构建、隐私友好的本地 Markdown 双栏阅读器" />
+    <meta name="color-scheme" content="light dark" />
+    <title>墨读 · 本地 Markdown 阅读器</title>
+    <link rel="stylesheet" href="./assets/app.css" />
+    <script defer src="./vendor/marked.umd.js"></script>
+    <script defer src="./assets/core.js"></script>
+    <script defer src="./assets/app.js"></script>
+  </head>
+  <body>
+    <div class="app-shell" id="appShell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="墨读首页">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="brand-name">墨读</span>
+          <span class="brand-suffix">LOCAL MD READER</span>
+        </a>
+
+        <div class="document-identity" aria-live="polite">
+          <span class="file-dot" aria-hidden="true"></span>
+          <span id="fileName">ARCHITECTURE.md</span>
+          <span class="saved-state" id="savedState">示例文档</span>
+        </div>
+
+        <nav class="topbar-actions" aria-label="文档操作">
+          <button class="icon-button" id="themeButton" type="button" aria-label="切换深浅主题" title="切换主题"><span aria-hidden="true">◐</span></button>
+          <button class="quiet-button hide-compact" id="printButton" type="button"><span aria-hidden="true">▧</span>打印</button>
+          <button class="quiet-button hide-compact" id="exportHtmlButton" type="button"><span aria-hidden="true">↗</span>导出 HTML</button>
+          <button class="quiet-button" id="saveMarkdownButton" type="button"><span aria-hidden="true">↓</span>保存 MD</button>
+          <button class="primary-button" id="openButton" type="button"><span aria-hidden="true">＋</span>打开 Markdown</button>
+          <input id="fileInput" type="file" accept=".md,.markdown,.mdown,.mkd,.txt,text/markdown,text/plain" hidden />
+        </nav>
+      </header>
+
+      <main class="workspace" id="workspace">
+        <section class="pane source-pane" aria-labelledby="sourceTitle">
+          <header class="pane-header">
+            <div class="pane-title-wrap">
+              <span class="eyebrow">SOURCE</span>
+              <h1 id="sourceTitle">原始文本</h1>
+            </div>
+            <div class="pane-meta">
+              <span id="lineCount">0 行</span><span class="meta-separator">·</span><span id="encodingLabel">UTF-8</span>
+            </div>
+          </header>
+          <textarea id="sourceEditor" class="source-editor" spellcheck="false" aria-label="Markdown 原始文本编辑区" placeholder="粘贴 Markdown，或打开本地文件…"></textarea>
+        </section>
+
+        <div class="splitter" id="splitter" role="separator" aria-label="调整左右栏宽度" aria-orientation="vertical" tabindex="0"><span></span></div>
+
+        <section class="pane preview-pane" id="previewPane" aria-labelledby="previewTitle">
+          <header class="pane-header preview-header">
+            <div class="pane-title-wrap">
+              <span class="eyebrow accent">PREVIEW</span>
+              <h2 id="previewTitle">实时预览</h2>
+            </div>
+            <div class="preview-tools">
+              <span class="reading-meta" id="readingMeta">0 字 · 0 分钟</span>
+              <button class="tool-button" id="outlineButton" type="button" aria-expanded="false" aria-controls="outlineDrawer"><span aria-hidden="true">☷</span><span>目录</span><b id="outlineCount">0</b></button>
+              <button class="tool-button" id="findButton" type="button"><span aria-hidden="true">⌕</span><span>查找</span></button>
+              <div class="font-controls" aria-label="阅读字号">
+                <button id="fontDecrease" type="button" aria-label="减小字号">A−</button>
+                <button id="fontIncrease" type="button" aria-label="增大字号">A＋</button>
+              </div>
+              <button class="tool-button is-active" id="syncButton" type="button" aria-pressed="true"><span aria-hidden="true">⇅</span><span id="syncLabel">同步</span></button>
+              <button class="tool-button" id="focusButton" type="button" aria-pressed="false"><span aria-hidden="true">□</span><span id="focusLabel">专注</span></button>
+            </div>
+          </header>
+
+          <div class="find-bar" id="findBar" role="search" hidden>
+            <span aria-hidden="true">⌕</span>
+            <input id="findInput" type="search" autocomplete="off" placeholder="在渲染内容中查找…" aria-label="查找内容" />
+            <span class="find-count" id="findCount">0 / 0</span>
+            <button id="findPrevious" type="button" aria-label="上一个结果">↑</button>
+            <button id="findNext" type="button" aria-label="下一个结果">↓</button>
+            <button id="findClose" type="button" aria-label="关闭查找">×</button>
+          </div>
+
+          <div class="outline-backdrop" id="outlineBackdrop"></div>
+          <aside class="outline-drawer" id="outlineDrawer" aria-label="文档目录" aria-hidden="true">
+            <header><div><span class="eyebrow accent">OUTLINE</span><h3>文档目录</h3></div><button id="outlineClose" type="button" aria-label="关闭目录">×</button></header>
+            <nav id="outlineList" aria-label="标题列表"></nav>
+          </aside>
+
+          <div class="preview-scroll" id="previewScroll">
+            <article class="markdown-body" id="preview" aria-live="polite"></article>
+            <footer class="document-end" id="documentEnd"><span></span><p>已到达文档末尾</p><span></span></footer>
+          </div>
+        </section>
+      </main>
+
+      <footer class="statusbar">
+        <div class="status-left">
+          <span class="status-ready"><i></i><span id="statusText">已就绪</span></span>
+          <span id="charCount">0 字符</span>
+          <span id="positionText">预览 0%</span>
+        </div>
+        <div class="status-hint"><kbd>Ctrl</kbd><span>+</span><kbd>O</kbd><span>打开</span><i></i><span>文件仅在本机处理</span></div>
+      </footer>
+
+      <div class="drop-overlay" id="dropOverlay" aria-hidden="true">
+        <div class="drop-card"><span class="drop-icon" aria-hidden="true">↘</span><strong>松开以打开 Markdown</strong><span>文件不会上传到任何服务器</span></div>
+      </div>
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
+  </body>
+</html>
